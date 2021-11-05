@@ -8,7 +8,8 @@ STEPS:
 5) Now you get full ACCESS to the Windows machine.
  
  
- Education purpose only
+ Education purpose only..
+ 
  Education, freedom and knowledge.
  These are the pillars for higher learning, 
  but have often been used to describe some open source projects 
