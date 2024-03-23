@@ -1,48 +1,44 @@
-# Define the folder path containing the files to encrypt 
-
+# Define the folder path containing the encrypted files
 $folderPath = "F:\Testing"
 
-# Set the password
-$password = "12345"
-
-# Convert the password to a secure string
-$securePassword = ConvertTo-SecureString -String $password -AsPlainText -Force
+# Prompt user to enter password
+$password = Read-Host -Prompt "Enter your password" -AsSecureString
 
 # Convert secure string password to plain text
-$plaintextPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePassword))
+$plaintextPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
 
-# Define encryption method
-$encryptionMethod = @{
+# Define decryption method
+$decryptionMethod = @{
     KeySize = 256
     BlockSize = 128
     Mode = 'CBC'
     Padding = 'PKCS7'
 }
 
-# Function to encrypt a file
-function Encrypt-File {
+# Function to decrypt a file
+function Decrypt-File {
     param (
         [string]$FilePath,
-        [hashtable]$EncryptionMethod
+        [hashtable]$DecryptionMethod
     )
 
-    # Generate AES encryption object
+    # Generate AES decryption object
     $aes = New-Object System.Security.Cryptography.AesManaged
-    $aes.KeySize = $EncryptionMethod['KeySize']
-    $aes.BlockSize = $EncryptionMethod['BlockSize']
-    $aes.Mode = $EncryptionMethod['Mode']
-    $aes.Padding = $EncryptionMethod['Padding']
+    $aes.KeySize = $DecryptionMethod['KeySize']
+    $aes.BlockSize = $DecryptionMethod['BlockSize']
+    $aes.Mode = $DecryptionMethod['Mode']
+    $aes.Padding = $DecryptionMethod['Padding']
 
     # Set key and IV
     $aes.Key = [System.Text.Encoding]::UTF8.GetBytes($plaintextPassword.PadRight(32))  # Pad password to match key size (for AES-256)
-    $aes.IV = [System.Text.Encoding]::UTF8.GetBytes("1234567890123456")  # Use a unique IV
+    $aes.IV = [System.Text.Encoding]::UTF8.GetBytes("1234567890123456")  # Use the same IV used during encryption
 
     # Create file streams
     $fileStreamIn = [System.IO.File]::OpenRead($FilePath)
-    $fileStreamOut = [System.IO.File]::Create("$FilePath.enc")
+    $fileStreamOut = [System.IO.File]::Create(($FilePath -replace '\.enc$', ''))  # Remove .enc extension for decrypted file
 
     # Create crypto streams
-    $cryptoStream = New-Object System.Security.Cryptography.CryptoStream($fileStreamOut, $aes.CreateEncryptor(), 'Write')
+    $cryptoStream = New-Object System.Security.Cryptography.CryptoStream($fileStreamOut, $aes.CreateDecryptor(), 'Write')
 
     # Copy data through crypto stream
     $buffer = New-Object byte[] 4096
@@ -56,11 +52,11 @@ function Encrypt-File {
     $fileStreamIn.Close()
     $fileStreamOut.Close()
 
-    # Delete the original file
+    # Remove the .enc file
     Remove-Item -Path $FilePath -Force
 }
 
-# Encrypt files in the folder
-Get-ChildItem -Path $folderPath -File | ForEach-Object {
-    Encrypt-File -FilePath $_.FullName -EncryptionMethod $encryptionMethod
+# Decrypt files in the folder
+Get-ChildItem -Path $folderPath -Filter *.enc | ForEach-Object {
+    Decrypt-File -FilePath $_.FullName -DecryptionMethod $decryptionMethod
 }
