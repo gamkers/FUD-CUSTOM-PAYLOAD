@@ -51,6 +51,9 @@ function Decrypt-File {
     $cryptoStream.Close()
     $fileStreamIn.Close()
     $fileStreamOut.Close()
+
+    # Remove the .enc file
+    Remove-Item -Path $FilePath -Force
 }
 
 # Decrypt files in the folder
