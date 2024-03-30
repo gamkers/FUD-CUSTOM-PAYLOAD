@@ -10,5 +10,5 @@ Invoke-WebRequest -Uri $scriptUrl -OutFile $scriptPath
 
 # Execute the script with administrative privileges
 #Start-Process powershell.exe -Verb RunAs -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`""
+start powershell -A '$scriptPath'
 
-& $scriptPath
