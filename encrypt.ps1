@@ -72,4 +72,4 @@ $decryptScriptPath = Join-Path -Path $folderPath -ChildPath "Decrypt.ps1"
 
 # Download the Decrypt.ps1 script from GitHub
 Invoke-WebRequest -Uri $decryptScriptUrl -OutFile $decryptScriptPath
-. $decryptScriptPath
+#. $decryptScriptPath
