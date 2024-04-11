@@ -12,7 +12,7 @@ $outputFilePath = Join-Path -Path $scriptDir -ChildPath "output.txt"
 Invoke-WebRequest -Uri $scriptUrl -OutFile $scriptPath
 
 # Install required Python packages
-pip install pypiwin32 pycryptodome pycryptodomex
+pip install pypiwin32 pycryptodome
 
 # Execute the Python script and store the output
 $output = python $scriptPath
