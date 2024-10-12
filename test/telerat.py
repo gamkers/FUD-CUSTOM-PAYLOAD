@@ -229,7 +229,7 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 def main() -> None:
     """Start the bot."""
-    application = Application.builder().token("7456059922:AAHPG-OTxBSLoslySTwnCdVC49V95wQYyAk").build()
+    application = Application.builder().token("your:tokenk").build()
 
     conv_handler = ConversationHandler(
         entry_points=[
