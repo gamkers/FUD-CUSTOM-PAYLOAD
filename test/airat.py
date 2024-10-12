@@ -165,7 +165,7 @@ sendfile_tools = Tool(
 prompt_react = hub.pull("hwchase17/react")
 
 # Initialize ChatGroq model
-model = ChatGroq(model_name="llama3-70b-8192", groq_api_key="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", temperature=0)
+model = ChatGroq(model_name="llama3-70b-8192", groq_api_key="api", temperature=0)
 
 # Create ReAct agent
 tools = [shell_command_tool, get_stored_wifi_passwords_tool, sendfile_tools,screenshot_ocr_tool,clipboard_content_tool]
