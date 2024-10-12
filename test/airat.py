@@ -228,7 +228,7 @@ async def send_file(chat_id, context, file_path):
         await context.bot.send_message(chat_id=chat_id, text="File not found.")
 
 def main():
-    app = Application.builder().token("7456059922:AAHPG-OTxBSLoslySTwnCdVC49V95wQYyAk").build()
+    app = Application.builder().token("<your:token").build()
     
     # Add command handler for sending screenshot
     app.add_handler(CommandHandler("screenshot", send_photo))
